@@ -1,8 +1,17 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, PropType } from 'vue'
+import { ColorOptions } from '../../types/ColorOptions'
+
+const props = defineProps({
+  color: {
+    default: '',
+    type: String as PropType<ColorOptions>,
+  },
+})
 
 const isImageVisible = ref('true')
-const color = ref('green')
+
+const isPlaying = ref(false)
 
 const edit = () => {
   console.log('Edit')
@@ -10,6 +19,8 @@ const edit = () => {
 
 const play = () => {
   console.log('Play')
+  isPlaying.value = true
+  setTimeout(() => (isPlaying.value = false), 1000)
 }
 </script>
 
@@ -18,35 +29,8 @@ const play = () => {
     class="item-wrapper w-full flex flex-col items-center justify-center h-60"
   >
     <div class="relative">
-      <button
-        class="
-          edit-button
-          z-20
-          w-8
-          h-8
-          hidden
-          absolute
-          top-0
-          right-0
-          rounded-full
-          bg-gradient-to-br
-          from-gray-200
-          to-gray-100
-          shadow-md
-          items-center
-          justify-center
-        "
-        @click="edit"
-      >
-        <img
-          v-if="isImageVisible"
-          class="rounded-full h-6 w-6"
-          src="../../assets/edit_black_24dp.svg"
-          alt="Edit"
-        />
-      </button>
-
       <div
+        v-if="isPlaying"
         class="
           z-20
           w-8
@@ -65,10 +49,9 @@ const play = () => {
         "
       >
         <img
-          v-if="isImageVisible"
           class="rounded-full h-6 w-6"
           src="../../assets/volume_up_black_24dp.svg"
-          alt="Edit"
+          alt="Is playing"
         />
       </div>
       <button
@@ -122,28 +105,69 @@ const play = () => {
         </div>
       </button>
     </div>
-    <div class="p-4 text-xl">Dummy</div>
+    <div class="p-3 w-full text-xl flex flex-row items-center justify-center">
+      <div class="p-2 inline-block">Dummy</div>
+      <button
+        class="
+          edit-button
+          p-2
+          w-8
+          h-8
+          flex
+          rounded-full
+          bg-gradient-to-br
+          from-gray-200
+          to-gray-100
+          shadow-sm
+          items-center
+          justify-center
+        "
+        @click="edit"
+      >
+        <img
+          class="rounded-full h-6 w-6"
+          src="../../assets/edit_black_24dp.svg"
+          alt="Edit"
+        />
+      </button>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.item-wrapper:hover > * > .edit-button {
-  @apply flex;
-}
-
 .sound-button:hover .status-overlay {
   @apply flex;
 }
 
-.sound-button.green {
+.sound-button.green-to-blue {
   @apply bg-green-300 bg-gradient-to-br from-green-500 to-blue-500;
 }
 
-.sound-button.green > div > div > img {
+.sound-button.green-to-blue > div > div > img {
   @apply bg-green-300 bg-gradient-to-br from-green-400 to-blue-400;
 }
 
 .sound-button.red {
-  @apply bg-red-300 border-red-500;
+  @apply bg-red-500;
+}
+
+.sound-button.red > div > div > img {
+  @apply bg-red-400;
+}
+
+.sound-button.blue {
+  @apply bg-blue-500;
+}
+
+.sound-button.blue > div > div > img {
+  @apply bg-blue-400;
+}
+
+.sound-button.green {
+  @apply bg-green-500;
+}
+
+.sound-button.green > div > div > img {
+  @apply bg-green-400;
 }
 </style>

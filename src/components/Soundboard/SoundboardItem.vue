@@ -29,7 +29,9 @@ const play = () => {
           top-0
           right-0
           rounded-full
-          bg-gray-200
+          bg-gradient-to-br
+          from-gray-200
+          to-gray-100
           shadow-md
           items-center
           justify-center
@@ -43,6 +45,7 @@ const play = () => {
           alt="Edit"
         />
       </button>
+
       <div
         class="
           z-20
@@ -53,7 +56,9 @@ const play = () => {
           bottom-0
           right-0
           rounded-full
-          bg-gray-200
+          bg-gradient-to-br
+          from-gray-200
+          to-gray-100
           shadow-md
           items-center
           justify-center
@@ -67,48 +72,52 @@ const play = () => {
         />
       </div>
       <button
+        :class="{ [`${color}`]: true }"
         class="
           sound-button
+          flex
+          items-center
+          justify-center
           w-32
           h-32
-          bg-green-300
-          border-green-500 border-8
           rounded-full
           shadow-lg
           hover:shadow-md
         "
         @click="play"
       >
-        <div class="relative">
-          <img
-            v-if="isImageVisible"
-            class="rounded-full shadow-inner"
-            src="../../assets/logo.png"
-            alt="Vue logo"
-          />
-          <div
-            class="
-              status-overlay
-              absolute
-              items-center
-              justify-center
-              text-white
-              top-0
-              left-0
-              z-10
-              w-full
-              h-full
-              bg-gray-900 bg-opacity-50
-              rounded-full
-              hidden
-            "
-          >
+        <div class="w-28 h-28">
+          <div class="relative">
             <img
               v-if="isImageVisible"
-              class="rounded-full h-12 w-12 scale-150"
-              src="../../assets/play_arrow_white_24dp.svg"
-              alt="Play"
+              class="rounded-full shadow-inner"
+              src="../../assets/logo.png"
+              alt="Vue logo"
             />
+            <div
+              class="
+                status-overlay
+                absolute
+                items-center
+                justify-center
+                text-white
+                top-0
+                left-0
+                z-10
+                w-full
+                h-full
+                bg-gray-900 bg-opacity-50
+                rounded-full
+                hidden
+              "
+            >
+              <img
+                v-if="isImageVisible"
+                class="rounded-full h-12 w-12 scale-150"
+                src="../../assets/play_arrow_white_24dp.svg"
+                alt="Play"
+              />
+            </div>
           </div>
         </div>
       </button>
@@ -124,5 +133,17 @@ const play = () => {
 
 .sound-button:hover .status-overlay {
   @apply flex;
+}
+
+.sound-button.green {
+  @apply bg-green-300 bg-gradient-to-br from-green-500 to-blue-500;
+}
+
+.sound-button.green > div > div > img {
+  @apply bg-green-300 bg-gradient-to-br from-green-400 to-blue-400;
+}
+
+.sound-button.red {
+  @apply bg-red-300 border-red-500;
 }
 </style>

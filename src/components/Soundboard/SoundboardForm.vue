@@ -1,8 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { ColorOptions } from '../../types/ColorOptions'
+import { SoundInput } from '../../types/SoundInput'
 
-const fileDataUrl = ref<string | undefined>(undefined)
+const fileDataUrl = ref<string>('')
 const title = ref<string>('')
+
+const emit = defineEmits<{
+  (e: 'addSound', sound: SoundInput): void
+}>()
 
 const readFile = async (file: File): Promise<string> => {
   const fileReader = new FileReader()
@@ -47,5 +53,16 @@ const play = () => {
       @input="title = ($event.target as HTMLInputElement).value"
     />
     <button @click="play">Play</button>
+    <button
+      @click="
+        () =>
+          emit('addSound', {
+            dataUrl: fileDataUrl,
+            title: title,
+            color: ColorOptions.GREEN_TO_BLUE,
+          })
+      "
+      >Add Sound</button
+    >
   </div>
 </template>

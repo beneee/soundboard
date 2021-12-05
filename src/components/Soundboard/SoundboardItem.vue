@@ -1,13 +1,10 @@
 <script setup lang="ts">
-import { ref, PropType } from 'vue'
-import { ColorOptions } from '../../types/ColorOptions'
+import { ref } from 'vue'
+import { Sound } from '../../types/Sound'
 
-const props = defineProps({
-  color: {
-    default: '',
-    type: String as PropType<ColorOptions>,
-  },
-})
+const props = defineProps<{
+  sound: Sound
+}>()
 
 const isImageVisible = ref('true')
 
@@ -17,10 +14,17 @@ const edit = () => {
   console.log('Edit')
 }
 
-const play = () => {
-  console.log('Play')
+const audioElement: HTMLAudioElement = new Audio()
+audioElement.onplay = () => {
   isPlaying.value = true
-  setTimeout(() => (isPlaying.value = false), 1000)
+}
+audioElement.onended = () => {
+  isPlaying.value = false
+}
+
+const play = () => {
+  audioElement.src = props.sound.dataUrl
+  audioElement.play()
 }
 </script>
 
@@ -31,22 +35,7 @@ const play = () => {
     <div class="relative">
       <div
         v-if="isPlaying"
-        class="
-          z-20
-          w-8
-          h-8
-          flex
-          absolute
-          bottom-0
-          right-0
-          rounded-full
-          bg-gradient-to-br
-          from-gray-200
-          to-gray-100
-          shadow-md
-          items-center
-          justify-center
-        "
+        class="z-20 w-8 h-8 flex absolute bottom-0 right-0 rounded-full bg-gradient-to-br from-gray-200 to-gray-100 shadow-md items-center justify-center"
       >
         <img
           class="rounded-full h-6 w-6"
@@ -55,18 +44,8 @@ const play = () => {
         />
       </div>
       <button
-        :class="{ [`${color}`]: true }"
-        class="
-          sound-button
-          flex
-          items-center
-          justify-center
-          w-32
-          h-32
-          rounded-full
-          shadow-lg
-          hover:shadow-md
-        "
+        :class="{ [`${sound.color}`]: true }"
+        class="sound-button flex items-center justify-center w-32 h-32 rounded-full shadow-lg hover:shadow-md"
         @click="play"
       >
         <div class="w-28 h-28">
@@ -78,21 +57,7 @@ const play = () => {
               alt="Vue logo"
             />
             <div
-              class="
-                status-overlay
-                absolute
-                items-center
-                justify-center
-                text-white
-                top-0
-                left-0
-                z-10
-                w-full
-                h-full
-                bg-gray-900 bg-opacity-50
-                rounded-full
-                hidden
-              "
+              class="status-overlay absolute items-center justify-center text-white top-0 left-0 z-10 w-full h-full bg-gray-900 bg-opacity-50 rounded-full hidden"
             >
               <img
                 v-if="isImageVisible"
@@ -106,22 +71,9 @@ const play = () => {
       </button>
     </div>
     <div class="p-3 w-full text-xl flex flex-row items-center justify-center">
-      <div class="p-2 inline-block">Dummy</div>
+      <div class="p-2 inline-block">{{ sound.title }}</div>
       <button
-        class="
-          edit-button
-          p-2
-          w-8
-          h-8
-          flex
-          rounded-full
-          bg-gradient-to-br
-          from-gray-200
-          to-gray-100
-          shadow-sm
-          items-center
-          justify-center
-        "
+        class="edit-button p-2 w-8 h-8 flex rounded-full bg-gradient-to-br from-gray-200 to-gray-100 shadow-sm items-center justify-center"
         @click="edit"
       >
         <img

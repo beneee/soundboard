@@ -6,7 +6,7 @@ const props = defineProps<{
   sound: Sound
 }>()
 
-const isImageVisible = ref('true')
+const isImageVisible = ref(true)
 
 const isPlaying = ref(false)
 

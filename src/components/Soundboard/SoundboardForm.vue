@@ -45,15 +45,23 @@ const play = () => {
 </script>
 
 <template>
-  <div>
-    <h2>Form</h2>
-    <input type="file" @change="handleFileChange" />
+  <div class="flex flex-col p-4 max-w-lg border border-gray-400 rounded">
+    <h2 class="mb-4 text-xl">Add sound</h2>
+    <input
+      type="file"
+      class="w-full border border-gray-400 rounded p-2 mb-4"
+      @change="handleFileChange"
+    />
     <input
       type="text"
+      class="w-full border border-gray-400 rounded p-2 mb-4"
       @input="title = ($event.target as HTMLInputElement).value"
     />
-    <button @click="play">Play</button>
+    <button class="w-min bg-gray-400 rounded px-4 py-2 mb-4" @click="play">
+      Play
+    </button>
     <button
+      class="bg-gray-400 rounded px-4 py-2"
       @click="
         () =>
           emit('addSound', {

@@ -3,7 +3,6 @@ import { ref } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import SoundboardItem from '../components/Soundboard/SoundboardItem.vue'
 import SoundboardForm from '../components/Soundboard/SoundboardForm.vue'
-import { ColorOptions } from '../types/ColorOptions'
 import { Sound } from '../types/Sound'
 import { SoundInput } from '../types/SoundInput'
 

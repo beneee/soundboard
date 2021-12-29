@@ -7,6 +7,8 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "@headlessui/vue": "^1.4.2",
+    "idb": "^7.0.0",
     "uuid": "^8.3.2",
     "vue": "^3.2.16",
     "vue-router": "^4.0.12",

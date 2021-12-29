@@ -6,12 +6,16 @@ const props = defineProps<{
   sound: Sound
 }>()
 
+const emit = defineEmits<{
+  (e: 'editSound', sound: Sound): void
+}>()
+
 const isImageVisible = ref(true)
 
 const isPlaying = ref(false)
 
 const edit = () => {
-  console.log('Edit')
+  emit('editSound', { ...props.sound })
 }
 
 const audioElement: HTMLAudioElement = new Audio()

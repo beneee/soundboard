@@ -2,6 +2,7 @@
 import { computed, onMounted, ref } from 'vue'
 import SoundboardItem from '../components/Soundboard/SoundboardItem.vue'
 // import SoundboardForm from '../components/Soundboard/SoundboardForm.vue'
+import SoundboardAddButton from '../components/Soundboard/SoundboardAddButton.vue'
 import SoundboardDialogAdd from '../components/Soundboard/SoundboardDialogAdd.vue'
 import SoundboardDialogEdit from '../components/Soundboard/SoundboardDialogEdit.vue'
 import { Sound } from '../types/Sound'
@@ -28,7 +29,10 @@ onMounted(async () => {
 const isAddSoundDialogVisible = ref(false)
 const addSound = (newSound: SoundInput) => {
   isAddSoundDialogVisible.value = false
-  store.dispatch('sounds/addSound', newSound)
+  store.dispatch('sounds/addSound', {
+    ...newSound,
+    title: newSound.title || `Sound #${soundList.value.length + 1}`,
+  })
 }
 
 /*
@@ -37,7 +41,13 @@ const addSound = (newSound: SoundInput) => {
 const selectedSoundForEdit = ref<SoundInput>()
 const updateSound = (newSound: SoundInput) => {
   selectedSoundForEdit.value = undefined
-  store.dispatch('sounds/addSound', newSound)
+  const soundIndex = soundList.value.findIndex(
+    (sound) => sound.id === newSound.id
+  )
+  store.dispatch('sounds/addSound', {
+    ...newSound,
+    title: newSound.title || `Sound #${soundIndex + 1}`,
+  })
 }
 const deleteSound = (soundId: string) => {
   selectedSoundForEdit.value = undefined
@@ -56,18 +66,19 @@ const deleteSound = (soundId: string) => {
         :sound="sound"
         @edit-sound="selectedSoundForEdit = sound"
       ></SoundboardItem>
-      <div>
-        <button @click="isAddSoundDialogVisible = true">+</button>
-      </div>
+      <SoundboardAddButton
+        @add-sound="isAddSoundDialogVisible = true"
+      ></SoundboardAddButton>
     </div>
     <div>
       <SoundboardDialogAdd
-        v-if="isAddSoundDialogVisible"
+        :show="isAddSoundDialogVisible"
         @add-sound="addSound"
         @cancel="isAddSoundDialogVisible = false"
       ></SoundboardDialogAdd>
       <SoundboardDialogEdit
         v-if="selectedSoundForEdit"
+        :show="!!selectedSoundForEdit"
         :sound="selectedSoundForEdit"
         @update-sound="updateSound"
         @delete-sound="deleteSound"

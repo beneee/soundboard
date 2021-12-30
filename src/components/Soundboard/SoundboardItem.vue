@@ -10,8 +10,6 @@ const emit = defineEmits<{
   (e: 'editSound', sound: Sound): void
 }>()
 
-const isImageVisible = ref(true)
-
 const isPlaying = ref(false)
 
 const edit = () => {
@@ -29,6 +27,20 @@ audioElement.onended = () => {
 const play = () => {
   audioElement.src = props.sound.dataUrl
   audioElement.play()
+}
+
+const stop = () => {
+  audioElement.pause()
+  audioElement.currentTime = 0
+  isPlaying.value = false
+}
+
+const playOrStop = () => {
+  if (isPlaying.value) {
+    stop()
+  } else {
+    play()
+  }
 }
 </script>
 
@@ -50,26 +62,35 @@ const play = () => {
       <button
         :class="{ [`${sound.color}`]: true }"
         class="sound-button flex items-center justify-center w-32 h-32 rounded-full shadow-lg hover:shadow-md"
-        @click="play"
+        @click="playOrStop"
       >
         <div class="w-28 h-28">
           <div class="relative">
             <img
-              v-if="isImageVisible"
-              class="rounded-full shadow-inner"
-              src="../../assets/logo.png"
+              v-if="sound.iconDataUrl"
+              class="sound-icon rounded-full shadow-inner"
+              :src="sound.iconDataUrl"
               alt="Vue logo"
             />
             <div
               class="status-overlay absolute items-center justify-center text-white top-0 left-0 z-10 w-full h-full bg-gray-900 bg-opacity-50 rounded-full hidden"
             >
-              <img
-                v-if="isImageVisible"
-                class="rounded-full h-12 w-12 scale-150"
-                src="../../assets/play_arrow_white_24dp.svg"
-                alt="Play"
-              />
+              <!--this is the gray overlay-->
             </div>
+          </div>
+          <div
+            class="absolute items-center justify-center top-0 left-0 w-full h-full flex"
+          >
+            <img
+              v-if="isPlaying"
+              class="play-icon rounded-full h-12 w-12 scale-150 opacity-0 z-30"
+              src="../../assets/stop_white_24dp.svg"
+            />
+            <img
+              v-else
+              class="play-icon rounded-full h-12 w-12 scale-150 opacity-0 z-30"
+              src="../../assets/play_arrow_white_24dp.svg"
+            />
           </div>
         </div>
       </button>
@@ -95,11 +116,15 @@ const play = () => {
   @apply flex;
 }
 
+.sound-button:hover .play-icon {
+  @apply opacity-90;
+}
+
 .sound-button.green-to-blue {
   @apply bg-green-300 bg-gradient-to-br from-green-500 to-blue-500;
 }
 
-.sound-button.green-to-blue > div > div > img {
+.sound-button.green-to-blue .sound-icon {
   @apply bg-green-300 bg-gradient-to-br from-green-400 to-blue-400;
 }
 

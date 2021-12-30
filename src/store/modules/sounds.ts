@@ -69,7 +69,7 @@ const actions = {
     })
   },
   removeSound: async (
-    { commit, getters, state }: ActionContext<SoundsState, State>,
+    { commit, getters }: ActionContext<SoundsState, State>,
     removeSoundId: string
   ): Promise<void> => {
     commit('removeSound', removeSoundId)

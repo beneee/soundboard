@@ -3,6 +3,9 @@ import { ref } from 'vue'
 import { ColorOptions } from '../../types/ColorOptions'
 import { Sound } from '../../types/Sound'
 import { SoundInput } from '../../types/SoundInput'
+import SoundboardDialogEditFormIconInput from './SoundboardDialogEditFormIconInput.vue'
+import SoundboardDialogEditFormSoundInput from './SoundboardDialogEditFormSoundInput.vue'
+import SoundboardDialogEditFormTitleInput from './SoundboardDialogEditFormTitleInput.vue'
 
 const props = defineProps<{
   sound: SoundInput
@@ -43,27 +46,34 @@ const play = () => {
     audio.play()
   }
 }
+
+const emitChange = (newSound: SoundInput) => {
+  console.log('newSound', newSound)
+  emit('changeSound', newSound)
+}
 </script>
 
 <template>
   <div class="">
-    <input
-      type="file"
-      class="w-full border border-gray-400 rounded p-2 mb-4"
-      @change="handleFileChange"
-    />
-    <button
-      v-if="sound.dataUrl"
-      class="w-min bg-gray-400 rounded px-4 py-2 mb-4"
-      @click="play"
-    >
-      Play
-    </button>
-    <input
-      :value="props.sound.title"
-      type="text"
-      class="w-full border border-gray-400 rounded p-2 mb-4"
-      @input="emit('changeSound', {...sound, title: ($event.target as HTMLInputElement).value})"
-    />
+    <div class="mb-4">
+      <SoundboardDialogEditFormTitleInput
+        :title="sound.title"
+        @change="(title) => emitChange({ ...sound, title })"
+      ></SoundboardDialogEditFormTitleInput>
+    </div>
+
+    <div class="mb-4">
+      <SoundboardDialogEditFormSoundInput
+        :sound-data-url="sound.dataUrl"
+        @change="(dataUrl) => emitChange({ ...sound, dataUrl })"
+      ></SoundboardDialogEditFormSoundInput>
+    </div>
+
+    <div class="mb-4">
+      <SoundboardDialogEditFormIconInput
+        :icon-data-url="sound.iconDataUrl"
+        @change="(iconDataUrl) => emitChange({ ...sound, iconDataUrl })"
+      ></SoundboardDialogEditFormIconInput>
+    </div>
   </div>
 </template>
